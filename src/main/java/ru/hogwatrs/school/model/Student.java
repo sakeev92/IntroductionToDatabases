@@ -3,17 +3,28 @@ package ru.hogwatrs.school.model;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
 
 import java.util.Objects;
 @Entity
 public class Student {
+
+
     @Id
     @GeneratedValue
-    private  long id;
-    private  String name;
-    private  int age;
 
+    private long id;
+    private String name;
+    private int age;
+@ManyToOne
+private Faculty faculty;
+    public long getId() {
+        return id;
+    }
 
+    public void setId(long id) {
+        this.id = id;
+    }
 
     public String getName() {
         return name;
@@ -27,12 +38,16 @@ public class Student {
         return age;
     }
 
-    public void setAge(int age) {
-        this.age = age;
+    public Faculty getFaculty() {
+        return faculty;
     }
 
-    public void setId(long id) {
-        this.id = id;
+    public void setFaculty(Faculty faculty) {
+        this.faculty = faculty;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
     }
 
     @Override
@@ -40,7 +55,7 @@ public class Student {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Student student = (Student) o;
-        return id == student.age && Objects.equals(id, student.id) && Objects.equals(name, student.name);
+        return id == student.id && age == student.age && Objects.equals(name, student.name);
     }
 
     @Override
@@ -55,13 +70,5 @@ public class Student {
                 ", name='" + name + '\'' +
                 ", age=" + age +
                 '}';
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Long getId() {
-        return id;
     }
 }

@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 @Service
 public class StudentServiceImpl implements StudentService {
 
-    private Long counter = 0L;
+    private final Long counter = 0L;
 
     private final StudentRepository studentRepository;
 
@@ -57,5 +57,9 @@ public class StudentServiceImpl implements StudentService {
                 .stream()
                 .filter(it ->it.getAge() == age)
                 .collect(Collectors.toList());
+    }
+    @Override
+    public Collection<Student> findByAgeBetween(int min, int max){
+        return studentRepository.findAllByAgeBetweenOrderByAge(min,max);
     }
 }
