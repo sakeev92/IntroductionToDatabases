@@ -2,48 +2,48 @@ package ru.hogwatrs.school.service.impl;
 
 import org.springframework.stereotype.Service;
 import ru.hogwatrs.school.model.Faculty;
+import ru.hogwatrs.school.repository.FacultyRepository;
 import ru.hogwatrs.school.service.FacultyService;
 
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.stream.Collectors;
 @Service
 public class FacultyServiceImpl implements FacultyService {
-    private Long counter = 0L;
 
-    private final Map<Long, Faculty> faculties = new HashMap<>();
+    private final FacultyRepository facultyRepository;
+
+    public FacultyServiceImpl(FacultyRepository facultyRepository) {
+        this.facultyRepository = facultyRepository;
+    }
 
 
     @Override
     public Faculty add(Faculty faculty) {
 
-        faculty.setId(++counter);
-        faculties.put(faculty.getId(), faculty);
-        return faculties.get(faculty.getId());
+      return  facultyRepository.save(faculty);
+
     }
 
     @Override
     public Faculty getById(Long id) {
-        return faculties.get(id);
+        return facultyRepository.findById(id).orElse(null);
     }
 
     @Override
     public Collection<Faculty> getAll() {
-        return faculties.values();
+        return facultyRepository.findAll();
     }
 
     @Override
     public void delete(Long id) {
-        faculties.remove(id);
+        facultyRepository.deleteById(id);
 
     }
 
 
     @Override
     public Faculty update(Faculty faculty) {
-        faculties.put(faculty.getId(),faculty);
-        return  faculties.get(faculty.getId());
+        return  facultyRepository.save(faculty);
     }
 
     @Override
