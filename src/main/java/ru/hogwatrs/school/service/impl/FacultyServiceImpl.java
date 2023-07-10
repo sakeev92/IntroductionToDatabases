@@ -2,6 +2,7 @@ package ru.hogwatrs.school.service.impl;
 
 import org.springframework.stereotype.Service;
 import ru.hogwatrs.school.model.Faculty;
+import ru.hogwatrs.school.model.Student;
 import ru.hogwatrs.school.repository.FacultyRepository;
 import ru.hogwatrs.school.service.FacultyService;
 
@@ -9,49 +10,47 @@ import java.util.Collection;
 import java.util.stream.Collectors;
 @Service
 public class FacultyServiceImpl implements FacultyService {
-
     private final FacultyRepository facultyRepository;
-
     public FacultyServiceImpl(FacultyRepository facultyRepository) {
         this.facultyRepository = facultyRepository;
     }
-
-
     @Override
-    public Faculty add(Faculty faculty) {
-
-      return  facultyRepository.save(faculty);
-
+    public Faculty addFaculty(Faculty faculty) {
+        facultyRepository.save(faculty);
+        return faculty;
     }
-
     @Override
-    public Faculty getById(Long id) {
-        return facultyRepository.findById(id).orElse(null);
+    public Faculty findFaculty(long facultyId) {
+        return facultyRepository.findById(facultyId).get();
     }
-
     @Override
-    public Collection<Faculty> getAll() {
+    public Faculty editFaculty(Faculty faculty) {
+        return facultyRepository.save(faculty);
+    }
+    @Override
+    public void deleteFaculty(long facultyId) {
+        facultyRepository.deleteById(facultyId);
+    }
+    @Override
+    public Collection<Faculty> getAllFaculties() {
         return facultyRepository.findAll();
     }
-
     @Override
-    public void delete(Long id) {
-        facultyRepository.deleteById(id);
-
-    }
-
-
-    @Override
-    public Faculty update(Faculty faculty) {
-        return  facultyRepository.save(faculty);
-    }
-
-    @Override
-    public Collection<Faculty> getAllByColor(String color) {
-        return  getAll()
+    public Collection<Faculty> getAllFacultiesByColor(String color) {
+        return getAllFaculties()
                 .stream()
-                .filter(it ->it.getColor().equals(color))
+                .filter(e->e.getColor().equals(color))
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public Collection<Faculty> getAllFacultiesByColorOrName(String color, String name) {
+        return facultyRepository.findByColorOrNameIgnoreCase(color, name);
+    }
+
+    @Override
+    public Collection<Student> getAllStudentsOfFaculty(long facultyId) {
+        return facultyRepository.findById(facultyId).get().getStudents();
     }
 }
 
